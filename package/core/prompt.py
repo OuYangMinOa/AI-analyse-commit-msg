@@ -30,7 +30,7 @@ def call_openai2(text:str, commit_log:str) -> str:
             
 
 def analyze_diff_with_openai( commit:str, commit_log:str) -> str:
-    response = prompt( build_prompt(commit, commit_log) )
+    response = prompt( build_prompt2(commit, commit_log) )
     return response
 
 
@@ -47,6 +47,50 @@ def build_sub_prompt(text:str):
                 "記憶:"
                 )
                 }]
+    return output
+
+def build_prompt2(commit:str, commit_log:str):
+    output = [
+            {"role": "system", "content": "你是一個擅長寫git commit msg 的專家。"},
+            {"role": "user"  , "content":(
+                "請分析這次commit的變更以及使用者打的commit msg，寫出最適合的commit msg"
+                "commit msg 需要符合以下格式:\n"
+                "```\n"
+                "TYPE: SUBJECT\n\n"
+                "BODY\n\n"
+                "```\n"
+                "=====\n"
+                "一個完整的Commit訊息必須包含以上三大區塊，且都由空行區隔。第一行標題列，必須包含TYPE與BODY。"
+                "TYPE必須包含在標題中，且符合下列類型。\n"
+                "feat: 新增/修改功能 (feature)。\n"
+                "fix: 修補 bug (bug fix)。\n"
+                "docs: 文件 (documentation)。\n"
+                "style: 格式 (不影響程式碼運行的變動)。\n"
+                "refactor: 重構 (既不是新增功能，也不是修補 bug 的程式碼變動)。\n"
+                "perf: 改善效能。\n"
+                "test: 增加測試。\n"
+                "chore: 建構程序或輔助工具的變動 (maintain)。\n"
+                "revert: 撤銷回覆先前的 commit 例如：revert: type(scope): subject (回覆版本：xxxx)。\n"
+                "=====\n"
+                "SUBJECT :\n"
+                "SUBJECT 不應超過50個字元，言簡意賅的簡述此Commit的改動。\n"
+                "BODY:\n"
+                "撰寫BODY時，請務必將改了什麼與為什麼而改以及可能造成的副作用寫清楚。"
+                "每行不超過72個字。\n"
+                "=====\n"
+                "輸出內容格式\n"
+                "===== \n"
+                " 建議: <對使用者輸入的commi tmsg提供建議，並說明你的理由。>\n"
+                " New commit msg:\n"
+                " ```\n"
+                " <你寫的commit msg>\n" 
+                " ```\n"
+                "\n===== \n"
+                f"commit diff:\n{commit}\n"
+                f"user commit msg:{commit_log}\n"
+                )
+            }
+    ]
     return output
 
 def build_prompt(commit:str, commit_log:str):

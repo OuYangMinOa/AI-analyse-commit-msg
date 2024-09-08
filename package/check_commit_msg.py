@@ -52,7 +52,7 @@ def main() -> int:
     win.call_openai_with_loading_dialog( git_show_output, commit_msg)
     output = win.openai_result
 
-    suggest_commit_log = output.split('```')[-2].strip()
+    suggest_commit_log = output.split('```')[-2].strip() if "```" in output else output
     logger.info("[*] AI suggest commit log:")
     logger.info(output)
     return win.build_widget(output, suggest_commit_log,commit_msg,commit_msg_filepath).start()
