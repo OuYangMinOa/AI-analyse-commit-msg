@@ -1,0 +1,2 @@
+pyinstaller --add-data="loading.gif:." --add-data="version.txt:." --noconfirm check_commit_msg.py  
+    

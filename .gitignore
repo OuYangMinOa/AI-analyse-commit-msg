@@ -1,0 +1,4 @@
+/package/dist
+/package/build
+/setup_exe.ps1
+/package/__pycache__
