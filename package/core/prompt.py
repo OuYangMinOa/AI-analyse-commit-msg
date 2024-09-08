@@ -1,6 +1,9 @@
 
+from config import MAX_PROMPT_LEN
+from tqdm   import tqdm
 
 
+### Custom your own AI here.
 def prompt(message):
     import requests
     prompt = {
@@ -19,8 +22,8 @@ def prompt(message):
 
 def call_openai2(text:str, commit_log:str) -> str:
     all_result = "Summary Source\n=====\n"
-    for i in range( len(text)//30_000 ):
-        this_text = text[i*30_000:(i+1)*30_000]
+    for i in tqdm(range( len(text)//MAX_PROMPT_LEN )):
+        this_text = text[i*MAX_PROMPT_LEN:(i+1)*MAX_PROMPT_LEN]
         response = prompt( build_sub_prompt(this_text) )
         all_result +=f"memory {i+1}:\n{response}"
     return all_result + analyze_diff_with_openai(all_result, commit_log)

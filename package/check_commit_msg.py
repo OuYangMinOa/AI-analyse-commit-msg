@@ -34,7 +34,7 @@ def main() -> int:
 
     ## Ask user if they want to use AI to analyze commit.
     git_show_output = subprocess.check_output(["git", "diff", "--cached"], encoding='utf-8')# , errors='ignore')
-    logger.info(f"[*] Git show output: {git_show_output}")
+    # logger.info(f"[*] Git show output: {git_show_output}")
 
     result = Messagebox.yesnocancel(f"將會使用AI分析commit\n是否要進行此操作？",title="IGS pre-commit hook tool",parent=win.root, pos="center")
     if (result=="No"):
